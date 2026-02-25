@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VEVO-EMO+ Demo</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #1f2937;
+        background: #f8fafc;
+      }
+
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px 40px;
+      }
+
+      .hero {
+        background: #111827;
+        color: #f9fafb;
+        padding: 36px 0;
+        margin-bottom: 24px;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: 30px;
+      }
+
+      h2 {
+        margin: 26px 0 12px;
+        font-size: 22px;
+      }
+
+      p {
+        line-height: 1.55;
+      }
+
+      .card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 18px;
+      }
+
+      .meta {
+        color: #4b5563;
+        margin-top: 8px;
+      }
+
+      .figure {
+        text-align: center;
+      }
+
+      .figure img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+      }
+
+      .figure figcaption {
+        margin-top: 8px;
+        color: #4b5563;
+        font-size: 14px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        min-width: 980px;
+      }
+
+      th,
+      td {
+        border: 1px solid #e5e7eb;
+        padding: 8px;
+        vertical-align: top;
+      }
+
+      th {
+        background: #f3f4f6;
+        font-weight: 700;
+      }
+
+      td:first-child,
+      th:first-child {
+        width: 190px;
+      }
+
+      audio {
+        width: 100%;
+      }
+
+      .tag {
+        display: inline-block;
+        margin-right: 6px;
+        margin-bottom: 6px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #e5e7eb;
+        font-size: 12px;
+        color: #111827;
+      }
+
+      .status {
+        padding: 10px 12px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        font-size: 14px;
+      }
+
+      .status.error {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .small {
+        font-size: 13px;
+        color: #4b5563;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrap">
+        <h1 id="project-title">VEVO-EMO+ Demo</h1>
+        <p id="project-subtitle">Any-to-any expressive voice conversion samples.</p>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="card">
+        <h2>Abstract</h2>
+        <p id="project-abstract">
+          This page is generated from <code>samples.json</code>. Update the JSON file to edit project text and audio rows.
+        </p>
+        <p class="meta" id="project-links"></p>
+      </section>
+
+      <section class="card figure">
+        <h2>Model Architecture</h2>
+        <figure>
+          <img src="./framework.png" alt="Model architecture" />
+          <figcaption id="figure-caption">Overview of the VEVO-EMO+ framework.</figcaption>
+        </figure>
+      </section>
+
+      <section class="card">
+        <h2>Speech Samples</h2>
+        <p class="small" id="subset-note"></p>
+        <div id="load-status" class="status" hidden></div>
+        <div id="sections-container"></div>
+      </section>
+    </main>
+
+    <script>
+      function audioCell(path) {
+        if (!path) return '<span class="small">N/A</span>';
+        return (
+          '<audio controls preload="none">' +
+          '<source src="' +
+          path +
+          '" type="audio/wav" />' +
+          "Your browser does not support audio." +
+          "</audio>"
+        );
+      }
+
+      function renderSection(section) {
+        const rows = (section.samples || [])
+          .map(function (s) {
+            const tags = (s.tags || []).map(function (t) {
+              return '<span class="tag">' + t + "</span>";
+            }).join("");
+
+            return (
+              "<tr>" +
+              "<td><strong>" + (s.id || "") + "</strong><br />" +
+              (s.direction || "") + "<br />" +
+              tags +
+              (s.note ? '<div class="small">' + s.note + "</div>" : "") +
+              "</td>" +
+              "<td>" + audioCell(s.source) + "</td>" +
+              "<td>" + audioCell(s.baseline) + "</td>" +
+              "<td>" + audioCell(s.proposed) + "</td>" +
+              "<td>" + audioCell(s.target) + "</td>" +
+              "</tr>"
+            );
+          })
+          .join("");
+
+        return (
+          '<div class="card">' +
+          "<h3>" + (section.title || "Section") + "</h3>" +
+          (section.description ? "<p>" + section.description + "</p>" : "") +
+          '<div class="table-wrap">' +
+          "<table>" +
+          "<thead><tr>" +
+          "<th>Case</th><th>Source</th><th>Baseline</th><th>Proposed</th><th>Target</th>" +
+          "</tr></thead>" +
+          "<tbody>" + rows + "</tbody>" +
+          "</table>" +
+          "</div>" +
+          "</div>"
+        );
+      }
+
+      function setText(id, value) {
+        const el = document.getElementById(id);
+        if (el && value) el.textContent = value;
+      }
+
+      function setLinks(links) {
+        const el = document.getElementById("project-links");
+        if (!el) return;
+        if (!links || !links.length) {
+          el.textContent = "";
+          return;
+        }
+        el.innerHTML = links
+          .map(function (link) {
+            return '<a href="' + link.url + '" target="_blank" rel="noopener noreferrer">' + link.label + "</a>";
+          })
+          .join(" | ");
+      }
+
+      function showStatus(message, isError) {
+        const box = document.getElementById("load-status");
+        if (!box) return;
+        box.hidden = false;
+        box.textContent = message;
+        box.className = isError ? "status error" : "status";
+      }
+
+      fetch("./samples.json")
+        .then(function (res) {
+          if (!res.ok) throw new Error("Cannot load samples.json");
+          return res.json();
+        })
+        .then(function (data) {
+          setText("project-title", data.project && data.project.title);
+          setText("project-subtitle", data.project && data.project.subtitle);
+          setText("project-abstract", data.project && data.project.abstract);
+          setText("figure-caption", data.figure_caption);
+          setText("subset-note", data.subset_note);
+          setLinks(data.project && data.project.links);
+
+          const container = document.getElementById("sections-container");
+          const sections = data.sections || [];
+          container.innerHTML = sections.map(renderSection).join("");
+          if (!sections.length) {
+            showStatus("No sections found in samples.json.", true);
+          }
+        })
+        .catch(function (err) {
+          showStatus("Failed to load data: " + err.message, true);
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "project": {
+    "title": "VEVO-EMO+: Any-to-Any Expressive Voice Conversion",
+    "subtitle": "Demo page with curated samples from a balanced test subset.",
+    "abstract": "We present VEVO-EMO+, an any-to-any expressive voice conversion system. This page provides representative source-to-target emotion transfer examples with side-by-side comparisons between baseline and proposed outputs.",
+    "links": [
+      {
+        "label": "Code",
+        "url": "https://github.com/your-org/your-repo"
+      },
+      {
+        "label": "Paper",
+        "url": "https://arxiv.org/abs/xxxx.xxxxx"
+      }
+    ]
+  },
+  "figure_caption": "Overview of VEVO-EMO+ training and inference.",
+  "subset_note": "Subset setting: 4 speakers, cross-emotion directions only, 4 candidate samples per speaker-direction (320 total candidates). The rows below are demo picks.",
+  "sections": [
+    {
+      "title": "Seen to Seen",
+      "description": "Source and target speakers are both seen during training.",
+      "samples": [
+        {
+          "id": "S2S-01",
+          "direction": "Neutral -> Surprise",
+          "tags": ["seen", "cross-emotion"],
+          "note": "Replace these paths with your real audio files.",
+          "source": "./Samples/gt/0011_000321.wav",
+          "baseline": "./Samples/baseline/0011_000321_Neutral_to_0011_001708_Surprise_voice.wav",
+          "proposed": "./Samples/proposed/0011_000321_Neutral_to_0011_001708_Surprise.wav",
+          "target": "./Samples/gt/0011_001721.wav"
+        },
+        {
+          "id": "S2S-01",
+          "direction": "Neutral -> Angry",
+          "tags": ["seen", "cross-emotion"],
+          "note": "Replace these paths with your real audio files.",
+          "source": "./Samples/gt/0011_000348.wav",
+          "baseline": "./Samples/baseline/0011_000348_Neutral_to_0011_000662_Angry_voice.wav",
+          "proposed": "./Samples/proposed/0011_000348_Neutral_to_0011_000662_Angry.wav",
+          "target": "./Samples/gt/0011_000698.wav"
+        }
+      ]
+      
+    }
+  ]
+}
