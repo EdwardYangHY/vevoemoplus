@@ -1,41 +1,33 @@
 {
   "project": {
-    "title": "VEVO-EMO+: Any-to-Any Expressive Voice Conversion",
-    "subtitle": "Demo page with curated samples from a balanced test subset.",
-    "abstract": "We present VEVO-EMO+, an any-to-any expressive voice conversion system. This page provides representative source-to-target emotion transfer examples with side-by-side comparisons between baseline and proposed outputs.",
+    "title": "VEVO Emo+: Unlocking Emotion Expressiveness in Voice Conversion with Emotion-Aware Prefix",
+    "subtitle": "Anonymous Submission to Interspeech 2026",
+    "abstract": "Recent advances in Voice Conversion (VC) have achieved remarkable speaker fidelity, yet repurposing these models for Emotional Voice Conversion (EVC) remains a challenge due to the risk of identity collapse. We propose VEVO Emo+, a framework that transforms a VC backbones into high-performance EVC systems with minimal architectural modification. By introducing Emotion-Aware Prefixes with Deep-Prefix Prompting, we achieve a significant breakthrough in affective precision, doubling the baseline Emotion Conversion Accuracy (ECA) from 42.40% to 85.50%. Our sensitivity analysis reveals a synergetic interaction between sequence-level prosody modulation and acoustic realization, where joint control at both stages is essential for categorical emotional distinctiveness. Furthermore, comparative analysis reveals that a decoupled acoustic realization stage acts as a critical identity anchor, enabling aggressive emotion conversion while maintaining the robust speaker fidelity and quality.",
     "links": [
-      {
-        "label": "Code",
-        "url": "https://github.com/your-org/your-repo"
-      },
       {
         "label": "Paper",
         "url": "https://arxiv.org/abs/xxxx.xxxxx"
       }
     ]
   },
-  "figure_caption": "Overview of VEVO-EMO+ training and inference.",
+  "figure_caption": "Overview of VEVO-EMO+ ",
   "subset_note": "Subset setting: 4 speakers, cross-emotion directions only, 4 candidate samples per speaker-direction (320 total candidates). The rows below are demo picks.",
   "sections": [
     {
-      "title": "Seen to Seen",
+      "title": "Neutral to Emotional",
       "description": "Source and target speakers are both seen during training.",
       "samples": [
         {
-          "id": "S2S-01",
+          "speaker": "0011",
           "direction": "Neutral -> Surprise",
-          "tags": ["seen", "cross-emotion"],
-          "note": "Replace these paths with your real audio files.",
           "source": "./Samples/gt/0011_000321.wav",
           "baseline": "./Samples/baseline/0011_000321_Neutral_to_0011_001708_Surprise_voice.wav",
           "proposed": "./Samples/proposed/0011_000321_Neutral_to_0011_001708_Surprise.wav",
           "target": "./Samples/gt/0011_001721.wav"
         },
         {
-          "id": "S2S-01",
+          "speaker": "0011",
           "direction": "Neutral -> Angry",
-          "tags": ["seen", "cross-emotion"],
-          "note": "Replace these paths with your real audio files.",
           "source": "./Samples/gt/0011_000348.wav",
           "baseline": "./Samples/baseline/0011_000348_Neutral_to_0011_000662_Angry_voice.wav",
           "proposed": "./Samples/proposed/0011_000348_Neutral_to_0011_000662_Angry.wav",
